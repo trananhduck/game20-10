@@ -42,19 +42,42 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     };
 
-    // Xử lý màn hình chào mừng
+    // Hàm tạo pháo hoa
+    function startConfetti() {
+        if (typeof confetti !== 'undefined') {
+            const duration = 5 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function () {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    }
+
+    // Xử lý màn hình chào mừng -> Bắt đầu với Game 3 (Qua Sông)
     startGameBtn.addEventListener('click', () => {
         playerName = playerNameInput.value.trim();
         if (playerName === '') {
             alert('Cậu chưa nhập tên kìa!');
             return;
         }
-        showScreen('game1-screen');
-        initGame1();
+        showScreen('game3-screen');
+        initGame3();
     });
 
     // =================================================================
-    // GAME 1: 15 PUZZLE
+    // GAME 1: 15 PUZZLE (Bây giờ là màn 2)
     // =================================================================
     const puzzleContainer = document.getElementById('puzzle-container');
     let tiles = [];
@@ -102,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function onTileClick(row, col) {
         const dRow = Math.abs(row - emptyTile.row);
         const dCol = Math.abs(col - emptyTile.col);
-
         if ((dRow === 1 && dCol === 0) || (dRow === 0 && dCol === 1)) {
             tiles[emptyTile.row][emptyTile.col] = tiles[row][col];
             tiles[row][col] = null;
@@ -120,9 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (row < 3) neighbors.push({ row: row + 1, col });
             if (col > 0) neighbors.push({ row, col: col - 1 });
             if (col < 3) neighbors.push({ row, col: col + 1 });
-
             const randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
-
             tiles[emptyTile.row][emptyTile.col] = tiles[randomNeighbor.row][randomNeighbor.col];
             tiles[randomNeighbor.row][randomNeighbor.col] = null;
             emptyTile = randomNeighbor;
@@ -141,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         setTimeout(() => {
-            showModal('Tuyệt vời!', 'Cậu đã hoàn thành thử thách đầu tiên!', 'Chơi tiếp', () => {
+            showModal('Tuyệt vời!', 'Cậu đã hoàn thành thử thách thứ hai!', 'Chơi tiếp', () => {
                 showScreen('game2-screen');
                 initGame2();
             });
@@ -150,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================================
-    // GAME 2: COLOR GRID
+    // GAME 2: COLOR GRID (Bây giờ là màn 3)
     // =================================================================
     const colorGrid = document.getElementById('color-grid');
     const colorGridContainer = document.getElementById('color-grid-container');
@@ -163,12 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'blue', 'blue', 'yellow', 'yellow',
         'blue', 'blue', 'yellow', 'yellow'
     ];
-    const initialGame2 = [
-        'red', 'red', 'green', 'green',
-        'red', 'red', 'green', 'green',
-        'blue', 'blue', 'yellow', 'yellow',
-        'blue', 'blue', 'yellow', 'yellow'
-    ];
+    const initialGame2 = [...solutionGame2];
 
     function initGame2() {
         colorTiles = [...initialGame2];
@@ -199,11 +214,8 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let col = 0; col < 3; col++) {
                 const node = document.createElement('div');
                 node.classList.add('rotate-node');
-
-                // <<< THAY ĐỔI DUY NHẤT Ở ĐÂY: DÙNG % THAY VÌ PX
                 node.style.top = `${(row + 1) * 25}%`;
                 node.style.left = `${(col + 1) * 25}%`;
-
                 node.addEventListener('click', () => rotateTiles(row, col));
                 colorGridContainer.appendChild(node);
             }
@@ -212,26 +224,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function rotateTiles(row, col, clockwise = true) {
         if (!game2Started) return;
-
         const topLeft = row * 4 + col;
         const topRight = topLeft + 1;
         const bottomLeft = topLeft + 4;
         const bottomRight = bottomLeft + 1;
         const indices = [topLeft, topRight, bottomRight, bottomLeft];
-
         const temp = colorTiles[indices[0]];
         if (clockwise) {
             colorTiles[indices[0]] = colorTiles[indices[3]];
             colorTiles[indices[3]] = colorTiles[indices[2]];
             colorTiles[indices[2]] = colorTiles[indices[1]];
             colorTiles[indices[1]] = temp;
-        } else { // Counter-clockwise
+        } else {
             colorTiles[indices[0]] = colorTiles[indices[1]];
             colorTiles[indices[1]] = colorTiles[indices[2]];
             colorTiles[indices[2]] = colorTiles[indices[3]];
             colorTiles[indices[3]] = temp;
         }
-
         renderColorGrid();
         checkGame2Win();
     }
@@ -252,23 +261,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkGame2Win() {
         if (!game2Started) return false;
-
         for (let i = 0; i < solutionGame2.length; i++) {
             if (colorTiles[i] !== solutionGame2[i]) {
                 return false;
             }
         }
         setTimeout(() => {
-            showModal('Xuất sắc!', 'Thử thách màu sắc đã được cậu giải mã!', 'Đến thử thách cuối!', () => {
-                showScreen('game3-screen');
-                initGame3();
+            showModal('Xuất sắc!', 'Cậu đã giải mã được tất cả thử thách!', 'Xem lời chúc!', () => {
+                showScreen('final-screen');
+                finalMessage.textContent = `Chúc ${playerName} ngày 20/10 vui vẻ và luôn hạnh phúc nhé! ❤️`;
+                startConfetti();
             });
         }, 300);
         return true;
     }
 
     // =================================================================
-    // GAME 3: RIVER CROSSING
+    // GAME 3: RIVER CROSSING (Bây giờ là màn 1)
     // =================================================================
     const leftBankEl = document.getElementById('left-bank');
     const rightBankEl = document.getElementById('right-bank');
@@ -279,12 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initGame3() {
         gameState3 = {
-            locations: {
-                farmer: 'left',
-                wolf: 'left',
-                sheep: 'left',
-                cabbage: 'left',
-            },
+            locations: { farmer: 'left', wolf: 'left', sheep: 'left', cabbage: 'left' },
             boatLocation: 'left',
             isMoving: false,
         };
@@ -295,20 +299,18 @@ document.addEventListener('DOMContentLoaded', () => {
         allCharacters.forEach(id => {
             const charEl = document.getElementById(id);
             const location = gameState3.locations[id];
-
             if (location === 'left') {
                 leftBankEl.appendChild(charEl);
                 charEl.classList.remove('in-boat');
             } else if (location === 'right') {
                 rightBankEl.appendChild(charEl);
                 charEl.classList.remove('in-boat');
-            } else { // on the boat
+            } else {
                 boatEl.appendChild(charEl);
                 charEl.classList.add('in-boat');
             }
         });
-
-        boatEl.className = 'boat'; // Reset class
+        boatEl.className = 'boat';
         if (gameState3.boatLocation === 'left') {
             boatEl.classList.add('at-left');
         } else {
@@ -316,12 +318,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function handleCharacterClick(id) {
+    function handleCharacterClick(event) {
+        const id = event.currentTarget.id;
         if (gameState3.isMoving) return;
-
         const characterLocation = gameState3.locations[id];
         const boatOccupants = allCharacters.filter(charId => gameState3.locations[charId] === 'boat');
-
         if (characterLocation === 'boat') {
             gameState3.locations[id] = gameState3.boatLocation;
         } else if (characterLocation === gameState3.boatLocation) {
@@ -335,39 +336,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     allCharacters.forEach(id => {
-        document.getElementById(id).addEventListener('click', () => handleCharacterClick(id));
+        document.getElementById(id).addEventListener('click', handleCharacterClick);
     });
 
     crossRiverBtn.addEventListener('click', () => {
         if (gameState3.isMoving) return;
-
         const boatOccupants = allCharacters.filter(id => gameState3.locations[id] === 'boat');
-
         if (!boatOccupants.includes('farmer')) {
             alert('Phải có người nông dân để lái thuyền chứ!');
             return;
         }
-
         gameState3.isMoving = true;
         const departingBankLocation = gameState3.boatLocation;
         gameState3.boatLocation = departingBankLocation === 'left' ? 'right' : 'left';
         renderGame3();
-
         setTimeout(() => {
             gameState3.isMoving = false;
-
-            // Cập nhật vị trí của các nhân vật trên thuyền
             boatOccupants.forEach(id => {
                 gameState3.locations[id] = gameState3.boatLocation;
             });
-
-            // Kiểm tra bờ vừa rời đi
             const itemsLeftBehind = allCharacters.filter(id => gameState3.locations[id] === departingBankLocation);
             if (isUnsafe(itemsLeftBehind)) {
-                showModal('Ôi không!', 'Tình huống ở bờ cậu vừa rời đi không an toàn. Sói đã ăn cừu hoặc cừu đã ăn bắp cải rồi!', 'Chơi lại', initGame3);
+                showModal('Ôi không!', 'Tình huống ở bờ cậu vừa rời đi không an toàn!', 'Chơi lại', initGame3);
                 return;
             }
-
             checkGame3Win();
         }, 1000);
     });
@@ -383,9 +375,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const itemsOnRightBank = allCharacters.filter(id => gameState3.locations[id] === 'right');
         if (itemsOnRightBank.length === 4) {
             setTimeout(() => {
-                showModal('Hoàn thành!', 'Cậu thật thông minh! Tất cả đã qua sông an toàn!', 'Xem lời chúc!', () => {
-                    showScreen('final-screen');
-                    finalMessage.textContent = `Chúc ${playerName} ngày 20/10 vui vẻ và luôn hạnh phúc nhé! ❤️`;
+                showModal('Hoàn thành!', 'Cậu thật thông minh! Cùng đến thử thách tiếp theo nào!', 'Tiếp tục', () => {
+                    showScreen('game1-screen');
+                    initGame1();
                 });
             }, 500);
         }

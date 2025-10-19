@@ -42,7 +42,23 @@ body {
     border-radius: var(--border-radius);
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     text-align: center;
+    position: relative; /* Thêm để định vị stage-indicator */
 }
+
+/* --- Style cho thanh chỉ báo màn chơi --- */
+.stage-indicator {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background-color: var(--background-color);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: var(--primary-color);
+    border: 1px solid var(--secondary-color);
+}
+
 
 h1, h2 {
     color: var(--primary-color);
@@ -272,29 +288,35 @@ button:hover {
 @media (max-width: 600px) {
     body {
         padding: 10px;
-        font-size: 14px; /* Giảm cỡ chữ cơ bản một chút */
+        font-size: 14px;
     }
 
     .container {
-        padding: 20px 15px; /* Giảm padding ngang */
+        padding: 20px 15px;
+    }
+    
+    .stage-indicator {
+        top: 10px;
+        right: 10px;
+        font-size: 0.8em;
     }
 
     h2 {
         font-size: 1.6em;
+        margin-top: 30px;
     }
 
     /* --- Game 1 & 2 Boards --- */
     #puzzle-container,
     #color-grid-container {
-        width: 90vw;   /* Rộng bằng 90% chiều rộng màn hình */
-        height: 90vw;  /* Cao bằng 90% chiều rộng màn hình */
-        max-width: 320px;  /* Không cho phép lớn hơn 320px */
+        width: 90vw;
+        height: 90vw;
+        max-width: 320px;
         max-height: 320px;
         padding: 5px;
     }
 
     .color-tile {
-        /* Xóa kích thước cố định, grid sẽ tự chia */
         width: auto;
         height: auto;
     }
@@ -306,14 +328,14 @@ button:hover {
 
     /* --- Game 3: River Crossing --- */
     .river-container {
-        flex-direction: column; /* Xếp các bờ và sông theo chiều dọc */
+        flex-direction: column;
         gap: 10px;
     }
 
     .bank {
-        width: 100%; /* Các bờ chiếm toàn bộ chiều rộng */
+        width: 100%;
         min-height: 120px;
-        flex-direction: row; /* Các nhân vật xếp hàng ngang */
+        flex-direction: row;
         justify-content: center;
         align-items: center;
     }
@@ -321,7 +343,7 @@ button:hover {
     .river {
         width: 100%;
         height: 80px;
-        order: 2; /* Đảm bảo sông luôn ở giữa */
+        order: 2;
     }
 
     #left-bank { order: 1; }
