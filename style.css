@@ -1,0 +1,329 @@
+:root {
+    --primary-color: #ff8fab;
+    --secondary-color: #ffc2d1;
+    --background-color: #fce4ec;
+    --text-color: #333;
+    --tile-bg: #fff;
+    --border-radius: 12px;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.screen {
+    display: none;
+    width: 100%;
+    max-width: 800px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.container {
+    background-color: white;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+h1, h2 {
+    color: var(--primary-color);
+}
+
+p {
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.capy-gif {
+    max-width: 150px;
+    margin: 15px auto;
+    border-radius: var(--border-radius);
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 12px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 8px;
+    font-size: 1em;
+    font-family: 'Quicksand', sans-serif;
+    margin-bottom: 20px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-family: 'Quicksand', sans-serif;
+}
+
+button:hover {
+    background-color: #f86d94;
+    transform: translateY(-2px);
+}
+
+/* Game 1: 15 Puzzle */
+#puzzle-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    width: 320px;
+    height: 320px;
+    margin: 20px auto;
+    padding: 10px;
+    background: var(--secondary-color);
+    border-radius: var(--border-radius);
+}
+
+.puzzle-tile {
+    width: 100%;
+    height: 100%;
+    background-color: var(--tile-bg);
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    user-select: none;
+}
+
+.puzzle-tile:hover {
+    background-color: #f0f0f0;
+}
+
+.puzzle-tile.empty {
+    background-color: transparent;
+    cursor: default;
+}
+
+/* Game 2: Color Grid */
+#color-grid-container {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    margin: 20px auto;
+}
+
+#color-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    height: 100%;
+}
+
+.color-tile {
+    width: 80px;
+    height: 80px;
+}
+
+.rotate-node {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #555;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    transition: background-color 0.3s;
+}
+
+.rotate-node:hover {
+    background: var(--primary-color);
+}
+
+#shuffle-game2-btn {
+    margin-top: 20px;
+}
+
+/* Game 3: River Crossing */
+.river-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #aedff7;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin: 20px 0;
+}
+
+.bank {
+    width: 150px;
+    min-height: 200px;
+    background: #98d89e;
+    border: 5px solid #6b9c70;
+    border-radius: var(--border-radius);
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 10px;
+}
+
+.river {
+    flex-grow: 1;
+    height: 100px;
+    position: relative;
+}
+.boat {
+    width: 100px;
+    height: 50px;
+    background: #c2a281;
+    border: 3px solid #7c5e3f;
+    border-radius: 10px 10px 20px 20px;
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: left 1s ease-in-out;
+}
+.boat.at-left { left: 10px; }
+.boat.at-right { left: calc(100% - 110px); }
+
+.character {
+    font-size: 2.5em;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s;
+}
+.character:hover {
+    transform: scale(1.1);
+}
+.character.in-boat {
+    font-size: 2em;
+}
+
+#game3-rules {
+    margin-top: 20px;
+    text-align: left;
+    display: inline-block;
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    animation: fadeIn 0.3s;
+}
+
+/* =================================================================
+   MEDIA QUERY FOR MOBILE DEVICES
+   ================================================================= */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+        font-size: 14px; /* Giảm cỡ chữ cơ bản một chút */
+    }
+
+    .container {
+        padding: 20px 15px; /* Giảm padding ngang */
+    }
+
+    h2 {
+        font-size: 1.6em;
+    }
+
+    /* --- Game 1 & 2 Boards --- */
+    #puzzle-container,
+    #color-grid-container {
+        width: 90vw;   /* Rộng bằng 90% chiều rộng màn hình */
+        height: 90vw;  /* Cao bằng 90% chiều rộng màn hình */
+        max-width: 320px;  /* Không cho phép lớn hơn 320px */
+        max-height: 320px;
+        padding: 5px;
+    }
+
+    .color-tile {
+        /* Xóa kích thước cố định, grid sẽ tự chia */
+        width: auto;
+        height: auto;
+    }
+
+    .rotate-node {
+        width: 25px;
+        height: 25px;
+    }
+
+    /* --- Game 3: River Crossing --- */
+    .river-container {
+        flex-direction: column; /* Xếp các bờ và sông theo chiều dọc */
+        gap: 10px;
+    }
+
+    .bank {
+        width: 100%; /* Các bờ chiếm toàn bộ chiều rộng */
+        min-height: 120px;
+        flex-direction: row; /* Các nhân vật xếp hàng ngang */
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .river {
+        width: 100%;
+        height: 80px;
+        order: 2; /* Đảm bảo sông luôn ở giữa */
+    }
+
+    #left-bank { order: 1; }
+    #right-bank { order: 3; }
+}

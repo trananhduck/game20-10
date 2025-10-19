@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Món Quà 20/10 Đặc Biệt</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="welcome-screen" class="screen active">
+      <div class="container">
+        <h1>Món Quà 20/10 Dành Tặng Cậu</h1>
+        <img src="./meo.jpg" alt="Meo" class="capy-gif" />
+        <p>Trước khi bắt đầu, cho tớ biết tên của cậu nhé:</p>
+        <input
+          type="text"
+          id="player-name-input"
+          placeholder="Nhập tên của cậu vào đây..."
+        />
+        <button id="start-game-btn">Bắt đầu hành trình!</button>
+      </div>
+    </div>
+
+    <div id="game1-screen" class="screen">
+      <div class="container">
+        <h2>Thử Thách 1: Xếp Hình Bí Ẩn</h2>
+        <p>Hãy sắp xếp các mảnh ghép về đúng thứ tự từ 1 đến 15 nhé!</p>
+        <div id="puzzle-container"></div>
+      </div>
+    </div>
+
+    <div id="game2-screen" class="screen">
+      <div class="container">
+        <h2>Thử Thách 2: Ma Trận Sắc Màu</h2>
+        <p>
+          Click vào các nút tròn để xoay 4 ô màu xung quanh. Hãy đưa chúng về
+          trạng thái ban đầu!
+        </p>
+        <div id="color-grid-container">
+          <div id="color-grid"></div>
+        </div>
+        <button id="shuffle-game2-btn">Trộn Màu</button>
+      </div>
+    </div>
+
+    <div id="game3-screen" class="screen">
+      <div class="container">
+        <h2>Thử Thách 3: Bài Toán Qua Sông Kinh Điển</h2>
+        <p>Giúp người nông dân đưa sói, cừu và bắp cải qua sông an toàn.</p>
+        <div class="river-container">
+          <div class="bank" id="left-bank">
+            <div class="character" id="farmer">👨‍🌾</div>
+            <div class="character" id="wolf">🐺</div>
+            <div class="character" id="sheep">🐑</div>
+            <div class="character" id="cabbage">🥬</div>
+          </div>
+          <div class="river">
+            <div class="boat" id="boat"></div>
+          </div>
+          <div class="bank" id="right-bank"></div>
+        </div>
+        <button id="cross-river-btn">Qua Sông</button>
+        <div id="game3-rules">
+          <strong>Luật chơi:</strong>
+          <ul>
+            <li>Thuyền chỉ chở được người nông dân và 1 thứ khác.</li>
+            <li>Nếu không có nông dân: Sói ăn Cừu, Cừu ăn Bắp cải.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="final-screen" class="screen">
+      <div class="container">
+        <img src="./meo.jpg" alt="Mèo" class="capy-gif" />
+        <h1 id="final-message"></h1>
+        <p>
+          Cảm ơn cậu đã tham gia cuộc hành trình nhỏ này. Chúc cậu có một ngày
+          thật ý nghĩa và tràn ngập niềm vui!
+        </p>
+      </div>
+    </div>
+
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2 id="modal-title"></h2>
+        <p id="modal-text"></p>
+        <button id="modal-button">Tiếp tục</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
